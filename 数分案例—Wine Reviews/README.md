@@ -7,7 +7,7 @@
 from kaggle：
 [https://www.kaggle.com/zynicide/wine-reviews](https://www.kaggle.com/zynicide/wine-reviews)
 
-#分析思路：
+# 分析思路：
 > 0、数据准备
 >1、葡萄酒的种类
 >2、葡萄酒质量
@@ -36,6 +36,7 @@ wine=pd.concat([wine1,wine2],ignore_index=True,sort=False)
 wine=wine.drop(labels='Unnamed: 0',axis=1)
 wine.info()
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-6ef910f0507dbabd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 #### 0.2 对wine表进行处理：
@@ -60,7 +61,9 @@ wine表共含有13个字段，每个字段共280901行，分别解释为：
 ```
 wine.duplicated().value_counts()
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-2c0094b67ef674e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 wine=wine.drop_duplicates()
 #进一步检查，发现存在很多字段都重复的数据，认为是重复数据并将其清除
@@ -69,10 +72,14 @@ wine=wine.drop(labels=dupilicated_index,axis=0)
 wine.reset_index(drop=True)
 ```
 （2）不良数据处理
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-f62be4feb3748109.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 经查看，points和price两项数据均在合理区间，故无不良数据。
 数据经过处理后：
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-193442ee51eebed6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 下面的分析主要围绕以下几个方面开展：
 - 葡萄酒种类，以及在各个国家的主要分布情况；
 - 葡萄酒得分情况，分析葡萄酒质量最好的国家和地区；
@@ -87,7 +94,9 @@ temp=wine.variety.value_counts()[0:15]
 ax=temp.plot(kind='bar',title='top 15 of Wine Virieties',colormap='Accent')
 plt.ylabel('Quantity',fontsize=12)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-1670837f11a16cd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 数量最多的葡萄酒种类有Pinot Noir 、Chardonnay 、Cabernet Sauvignon等等。
 #### 1.2 不同国家的种类分布
 ```
@@ -96,7 +105,9 @@ temp.plot(kind='pie',autopct='%.2f%%',figsize=(12,12))
 plt.legend(bbox_to_anchor=(1,1))  #将图例设置在图片外
 #图片尽力了，之后再研究可视化自定义的东西吧
 ```
+
 ![](https://upload-images.jianshu.io/upload_images/18032205-b0fd92257344cfad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - US、France、Italy、Spain都是葡萄酒大国，前四者的葡萄酒种类数量超过了总市场75%的份额。
 ```
 temp=wine.groupby(['country','variety']).variety.count()
@@ -115,7 +126,9 @@ temp2=pd.merge(temp,temp1,on='country',right_index=True)
 temp3=temp2.sort_values(by=['rank_country','rank_variety'])
 temp3[temp3.rank_variety<6]
 ```
+
 ![](https://upload-images.jianshu.io/upload_images/18032205-91cef816ee55d367.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 提供一个表查询，可以返回每个国家数量最多的五类葡萄酒。
 # 2、葡萄酒质量
 #### 2.1 总体质量情况
@@ -124,8 +137,10 @@ sns.set(style="darkgrid")
 sns.boxplot(y='points',data=wine)
 wine.points.describe()
 ```
+
 ![](https://upload-images.jianshu.io/upload_images/18032205-9028406c1cde1dcf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ![](https://upload-images.jianshu.io/upload_images/18032205-37ecbaa32427363b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 葡萄酒平均得分为88.24分，可以认为：
   优秀：90分及以上
   良好：88.5~90分
@@ -147,7 +162,9 @@ sns.boxplot(x='country',y='points',data=temp1)
 plt.xticks(rotation=30)
 #想在箱图中加一条平均值的直线，但是不知道怎么加！！
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-2aab09dc0541c8d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - Canada、Austria虽然不是不是葡萄酒的盛产国，但其平均分治较高，而且低分葡萄酒较少，表明这些国家的葡萄酒质量有一定的保障，但没有绝佳的葡萄酒产品；
 - US、France作为葡萄酒大国，均分处在中等水平，同时存在绝佳的葡萄酒（满分产品）以及质量较差的葡萄酒（最低分产品），葡萄酒整体质量尚可，
 - Spain作为葡萄酒第二大国，均分较低，也不存在绝佳的葡萄酒产品，整体质量有待提高。
@@ -165,36 +182,47 @@ country_points_new=country_points_new.drop(label='total',axis=1)
 country_points_new.columns=pd.MultiIndex.from_product([['Ratio'],['bad','normal','good','excellent']])
 country_points_new.plot(y='Ratio',kind='bar',figsize=(10,6),stacked=True)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-480f506e93d840e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - Canada、Austria、Germany表现良好，Chile、Argentina
 、Greece表现较差，这与前文中分析的结论是一致的；
 - 葡萄酒大国中US、France比较优秀，Spain表现有待提升，这与前文中分析的结论也是一致的。
 
 # 3、葡萄酒价格
 #### 3.1 整体价格情况
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-bc8a3878057a1b44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 葡萄酒价格最大值为3300，属于极值情况
 ```
 plt.figure(figsize=(15,15))
 sns.stripplot(y='price',data=wine)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-5e078ae246282759.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 plt.figure(figsize=(15,15))
 sns.distplot(wine.price.dropna())
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-cf133200b7f421bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 根据葡萄酒的价格分布可知：
 - 葡萄酒价格一般在0~100之间，超过500以上的可认为是高端酒类，超过1000以上则是顶级奢华酒类。
 
 这些顶级奢华葡萄酒分别是：
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-5c51c608e447792c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 high_price=wine[wine.price>=1000][['country','province','designation','points','variety','price']].sort_values(by='price')
 high_price.plot(kind='bar',x='variety',y='price')
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-b7dc5fb6bc525e0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 可以得到以下结论：
 - 最顶级的葡萄酒种类为：Bordeaux-style Red Blend、Pinot Noir、Chardonnay、Grüner Veltliner、Port和Bordeaux-style White Blend；
 - 法国Bordeaux盛产顶级葡萄酒，主要是以Bordeaux命名的两类葡萄酒：Bordeaux-style Red Blend、Bordeaux-style White Blend；
@@ -206,7 +234,9 @@ high_price.plot(kind='bar',x='variety',y='price')
 plt.figure(figsize=(12,12))
 sns.scatterplot(x='price',y='points',data=wine)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-c180727f7fa05163.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 a=wine[['points','price']].corr()
 print('价格和评分的整体相关性系数为%.4f'%(a[0:1]['price']))
@@ -225,7 +255,9 @@ print('单价为100以下的葡萄酒价格和评分的相关性系数为%.4f'%(
 plt.figure(figsize=(12,12))
 sns.lmplot(x='price',y='points',data=(wine[wine.price<100][['points','price']]))
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-288df83894822605.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 from sklearn import linear_model #导入机器学习库中的线性回归方法
 x=np.array(wine[wine.price<100]['price']).reshape(151615,1)
@@ -253,14 +285,18 @@ wine_good=wine[wine_good.points>wine_good.points_new].reset_index(drop=True)
 wine_good.country.value_counts().plot(kind='pie',figsize=(12,12))
 plt.legend(bbox_to_anchor=(1,1))  #将图例设置在图片外
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-484ed29f23a78835.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 与前文分析对比可知：
 - US、France、Italy、Spain都是葡萄酒大国，US无论是葡萄酒数量还是高性价比葡萄酒数量都稳居榜首；
 - France虽然葡萄酒数量占比比Italy更高，但是性价比方面却落后于Italy，这可能是因为France擅产顶级奢侈葡萄酒，而Italy把市场瞄准在中端市场。
 ```
 wine_good.variety.value_counts()[0:15].plot(kind='bar',figsize=(12,12))
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-d011d6aa00fddc98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 含有较多高性价比葡萄酒的种类有：Pinot Noir、Chardonnay、Red Blend 、Cabernet Sauvignon、Riesling等，而这几类本身也是市场占有率较高的几类；
 - 同时含有顶级奢侈酒的种类有：Pinot Noir、Chardonnay、Bordeaux-style Red Blend。
 #### 3.3 高性价比葡萄酒推荐库
@@ -273,6 +309,7 @@ wine_recommend=wine.loc[temp].reset_index(drop=True)
 plt.figure(figsize=(15, 10))
 sns.scatterplot(y='points',x='price',hue='country',data=wine_recommend)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-09c6a014d333e461.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 创建葡萄酒推荐库，当用户输入预期价格时，会自动推荐性价比最高的葡萄酒（也可以创建库让用户可以输入国家或者种类等信息，这里没有拓展）：
@@ -314,7 +351,9 @@ plt.imshow(wc, interpolation='bilinear')
 plt.axis("off")
 plt.show()
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-4a8c1c72331375ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 整体性的关键词描述：wine、aromas、Cabernet、blackberry、blend等；
 
 #### 4.2 创建不同种类葡萄酒的词频库
@@ -388,19 +427,24 @@ Sémillon
 wine.taster_name.value_counts().plot(kind='bar',figsize=(12,12))
 plt.xticks(rotation=90)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-6e8e31bcf54b653b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 - 一共有19位品鉴师，其中Roger Voss、Michael Schachner、Kerin O’Keefe、Virginie Boone、Paul Gregutt等人是最资深的葡萄酒品鉴专家，并负责了市场上绝大部分的葡萄酒品鉴工作。
 #### 5.2 受到不同市场青睐的品鉴师
 ```
 wine.groupby('taster_name').price.describe().sort_values(by='count',ascending=False)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-88ae0d0289ed1208.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 plt.figure(figsize=(12,12))
 wine_taster=wine[(wine.taster_name=='Roger Voss')|(wine.taster_name=='Michael Schachner')|(wine.taster_name=='Kerin O’Keefe')|(wine.taster_name=='Virginie Boone')|(wine.taster_name=='Paul Gregutt')]
 sns.boxplot(y='points',x='taster_name',data=wine_taster)
 plt.xticks(rotation=90)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-4be26d3707e658bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 从表中数据可以看出：
@@ -438,6 +482,7 @@ name_link.columns=[['taster_name','taster_twitter_handle']]
 #联结两表
 taster_info=pd.merge(name_link,taster_variety)
 ```
+
 ![image.png](https://upload-images.jianshu.io/upload_images/18032205-a15a4dbbc3610c2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - 提供了一个品鉴师名录，按照资深程度排序，显示该品鉴师的联系方式，以及品鉴最多的五类葡萄酒。
