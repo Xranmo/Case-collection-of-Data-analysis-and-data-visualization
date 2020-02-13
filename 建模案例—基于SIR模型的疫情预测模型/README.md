@@ -67,16 +67,16 @@ SIR模型中，需要确定的参数包括β、γ和α。γ可以直接采用1/1
                                    **R0=kbD**
 其中k是一个有传染能力的患者平均每天与易感人群的接触次数，b是每次接触传染成功的概率，D是可以传播的时间，可以认为等同于潜伏周期。
 
-![image.png](https://upload-images.jianshu.io/upload_images/18032205-05a6f4a09c5df172.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/18032205-f3acb2f880fd4afb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 基于实施情况考虑将疫情发展分为三个阶段：
 - 第一阶段：1月11日~1月22，疫情自然发展，此时R0为基本传染数的基准值；
-- 第二阶段：1月23日~1月23日，由武汉封城逐渐引起公众重视，此时疫情进入新发展阶段。根据官方公布数据，由于感染者积极就诊，加强预防和锻炼等方式，D由原始的14天潜伏期下降为10天；同时公众开始进行自我隔离和互相隔离使得k值稳定下降，以及采用勤洗手、戴口罩等方式使得b值稳定下降；
+- 第二阶段：1月23日~1月23日，由武汉封城逐渐引起公众重视，此时疫情进入新发展阶段。根据官方公布数据，由于感染者积极就诊，加强预防和锻炼等方式，D由原始的平均10天潜伏期下降为7天；同时公众开始进行自我隔离和互相隔离使得k值稳定下降，以及采用勤洗手、戴口罩等方式使得b值稳定下降；
 - 第三阶段：1月28日至今，由政府主导，积极采取宣传措施和隔离措施，使得k值和b值下降到最低值，在不发生爆发性病毒感染事件的情况下，此时R0进入最新的稳定最低值。
 
 因此，当第二阶段的R0每日按照σ等比例下降时，至1月28的R0情况如下图所示：
 
-![image.png](https://upload-images.jianshu.io/upload_images/18032205-eb06c5caa6dfde49.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/18032205-1c2d2fa8f1149d1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 例如，当σ=0.3时，四川省的感染者情况为：
 
